@@ -1,0 +1,4 @@
+#!/bin/bash
+killall mplayer avconv youtube-dl
+youtube-dl --no-part --yes-playlist --youtube-skip-dash-manifest -f 17 "$1" -q -o /dev/stdout | mplayer -
+#youtube-dl --no-part --youtube-skip-dash-manifest -f 140 "$1" -q -o /dev/stdout | mplayer -

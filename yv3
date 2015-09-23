@@ -1,0 +1,3 @@
+#!/bin/bash
+killall mplayer avconv youtube-dl
+youtube-dl --no-part --youtube-skip-dash-manifest -f 17 "$1" -q -o /dev/stdout | mplayer -
