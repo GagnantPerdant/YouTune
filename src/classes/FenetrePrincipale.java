@@ -1,6 +1,7 @@
 package classes;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -52,69 +53,78 @@ public class FenetrePrincipale extends JFrame
 	setContentPane(buildContentPane());
     }
 
-    private JPanel buildContentPane(){
-		/* gestionnaire de placement fenetre principale */
-		panel.setLayout(new BorderLayout());
-		
-		//JScrollPane panTableSite = new JScrollPane(tblMessSite);
-		//panel.add(panTableSite, BorderLayout.WEST);
-		
-		//JScrollPane panTableOffre = new JScrollPane(tblMessOffre);
-		//panel.add(panTableOffre, BorderLayout.CENTER);
-		
-		//tblMessDetail.setAutoCreateRowSorter(true);
-		JScrollPane panTableDetail = new JScrollPane(tblMessVideo);
-		panel.add(panTableDetail, BorderLayout.CENTER);
-		panel.setVisible(true);
-		
-		zoneTexte.setLineWrap(true);
-		panel.add(zoneTexte, BorderLayout.SOUTH);
-		
-		tblMessVideo.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-	            int x = tblMessVideo.rowAtPoint(new Point(e.getX(), e.getY()));
-	            int y = tblMessVideo.columnAtPoint(new Point(e.getX(), e.getY()));
-	            //System.out.println(x + " " + y);
-				//System.out.println(tblMessVideo.getComponentAt(x, y) );
-	            
-	            URI f = null;
-				try {
-					f = new URI(tblMessVideo.getModel().getValueAt(x, y).toString() );
-				} catch (URISyntaxException e2) {
-					e2.getMessage();
-				}
-	            zoneTexte.setText(listDataVideo.getRowCount() + " résultats - " + f);
-				try {
-					System.out.println(f.toURL().toString() );
-				} catch (MalformedURLException e2) {
-					e2.getMessage();
-				}
-				String cmd = "xterm -e ./yv " + f ;
-				System.out.println(cmd);
-				System.out.println(executeCommand(cmd));
-				/*
-				// Start browser
-				if (Desktop.isDesktopSupported()) {  
-				    Desktop dt = Desktop.getDesktop();  
-				    if (dt.isSupported(Desktop.Action.BROWSE)) {  
-				        //File f = new File(filePath);
-				        try {
-							dt.browse(f);
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}  
-				    }  
-				} 
-				// TODO Auto-generated method stub
-				*/
-				super.mouseClicked(e);
-			} 
-		});		
-		
-		return panel;
-	}    public void addToListVideo(Video video) throws MalformedURLException
+    private JPanel buildContentPane()
+    {
+	/* gestionnaire de placement fenetre principale */
+	panel.setLayout(new BorderLayout());
+
+	// JScrollPane panTableSite = new JScrollPane(tblMessSite);
+	// panel.add(panTableSite, BorderLayout.WEST);
+
+	// JScrollPane panTableOffre = new JScrollPane(tblMessOffre);
+	// panel.add(panTableOffre, BorderLayout.CENTER);
+
+	// tblMessDetail.setAutoCreateRowSorter(true);
+	JScrollPane panTableDetail = new JScrollPane(tblMessVideo);
+	panel.add(panTableDetail, BorderLayout.CENTER);
+	panel.setVisible(true);
+
+	zoneTexte.setLineWrap(true);
+	panel.add(zoneTexte, BorderLayout.SOUTH);
+
+	Font fonte = new Font("2.TimesRoman ",Font.LAYOUT_LEFT_TO_RIGHT,9);
+	tblMessVideo.setFont(fonte);
+	tblMessVideo.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
+	tblMessVideo.getColumnModel().getColumn(0).setPreferredWidth(345);
+	tblMessVideo.getColumnModel().getColumn(1).setPreferredWidth(45);
+	tblMessVideo.getColumnModel().getColumn(2).setPreferredWidth(10);
+	tblMessVideo.addMouseListener(new MouseAdapter()
+	{
+	    @Override
+	    public void mouseClicked(MouseEvent e)
+	    {
+		int x = tblMessVideo.rowAtPoint(new Point(e.getX(), e.getY()));
+		int y = tblMessVideo.columnAtPoint(new Point(e.getX(), e.getY()));
+		// System.out.println(x + " " + y);
+		// System.out.println(tblMessVideo.getComponentAt(x, y) );
+
+		URI f = null;
+		try
+		{
+		    f = new URI(tblMessVideo.getModel().getValueAt(x, y)
+			    .toString());
+		} catch (URISyntaxException e2)
+		{
+		    e2.getMessage();
+		}
+		zoneTexte.setText(listDataVideo.getRowCount() + " résultats - "
+			+ f);
+		try
+		{
+		    System.out.println(f.toURL().toString());
+		} catch (MalformedURLException e2)
+		{
+		    e2.getMessage();
+		}
+		String cmd = "xterm -e ./yv " + f;
+		System.out.println(cmd);
+		System.out.println(executeCommand(cmd));
+		/*
+		 * // Start browser if (Desktop.isDesktopSupported()) { Desktop
+		 * dt = Desktop.getDesktop(); if
+		 * (dt.isSupported(Desktop.Action.BROWSE)) { //File f = new
+		 * File(filePath); try { dt.browse(f); } catch (IOException e1)
+		 * { // TODO Auto-generated catch block e1.printStackTrace(); }
+		 * } } // TODO Auto-generated method stub
+		 */
+		super.mouseClicked(e);
+	    }
+	});
+
+	return panel;
+    }
+
+    public void addToListVideo(Video video) throws MalformedURLException
     {
 	/* String[] colsVideo = {"Title", "Length", "Url"}; */
 	Object[] rowData = { video.getTitle(), video.getLength(),
